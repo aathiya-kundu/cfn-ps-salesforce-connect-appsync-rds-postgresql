@@ -677,7 +677,7 @@ Resources:
     Condition: CreateStandardCluster
     Properties:
       Description: "Aurora Cluster Parameter Group"
-      Family: aurora-postgresql13
+      Family: aurora-postgresql16
       Parameters:
         rds.logical_replication: 1
         wal_sender_timeout: 0
@@ -699,7 +699,7 @@ Resources:
     Condition: CreateStandardCluster
     Properties:
       Description: Aurora Parameter Group
-      Family: aurora-postgresql13
+      Family: aurora-postgresql16
 
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
@@ -752,7 +752,7 @@ Resources:
     Condition: CreateServerlessCluster
     Properties:
       Description: "Aurora Serverless Cluster Parameter Group"
-      Family: aurora-postgresql11
+      Family: aurora-postgresql16
       Parameters:
         rds.logical_replication: 1
         wal_sender_timeout: 0
