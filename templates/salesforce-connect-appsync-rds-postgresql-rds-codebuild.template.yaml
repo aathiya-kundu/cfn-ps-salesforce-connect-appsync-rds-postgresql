@@ -752,7 +752,7 @@ Resources:
     Condition: CreateServerlessCluster
     Properties:
       Description: "Aurora Serverless Cluster Parameter Group"
-      Family: aurora-postgresql16
+      Family: aurora-postgresql11
       Parameters:
         rds.logical_replication: 1
         wal_sender_timeout: 0
