@@ -313,58 +313,58 @@ Parameters:
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-ia']
 
-Resources:
-  VPCStack:
-    Type: 'AWS::CloudFormation::Stack'
-    Properties:
-      TemplateURL:
-        !Sub
-        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/cfn-ps-aws-vpc/templates/aws-vpc.template.yaml
-        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-      Parameters:
-        AvailabilityZones: !Join
-          - ','
-          - !Ref AvailabilityZones
-        NumberOfAZs: '2'
-        PrivateSubnet1ACIDR: !Ref PrivateSubnet1CIDR
-        PrivateSubnet2ACIDR: !Ref PrivateSubnet2CIDR
-        PublicSubnet1CIDR: !Ref PublicSubnet1CIDR
-        PublicSubnet2CIDR: !Ref PublicSubnet2CIDR
-        VPCCIDR: !Ref VPCCIDR
-  ExistingVPCStack:
-    Type: 'AWS::CloudFormation::Stack'
-    Properties:
-      TemplateURL:
-        !Sub
-        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/salesforce-connect-appsync-rds-postgresql-existing-vpc.template.yaml
-        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-      Parameters:
-        AvailabilityZones: !Join
-          - ','
-          - !Ref AvailabilityZones
-        VPCID: !GetAtt VPCStack.Outputs.VPCID
-        PrivateSubnet1ID: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
-        PrivateSubnet2ID: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
-        RDSClusterMode: !Ref RDSClusterMode
-        AutoPauseCluster: !Ref AutoPauseCluster
-        SecondsUntilAutoPause: !Ref SecondsUntilAutoPause
-        MinCapacity: !Ref MinCapacity
-        MaxCapacity: !Ref MaxCapacity
-        DBInstanceClass: !Ref DBInstanceClass
-        AppSyncAuthenticationType: !Ref AppSyncAuthenticationType
-        GraphQLResolverName: !Ref GraphQLResolverName
-        GraphQLSchemaLocation: !Ref GraphQLSchemaLocation
-        GraphQLSchemaName: !Ref GraphQLSchemaName
-        RDSSchemaLocation: !Ref RDSSchemaLocation
-        RDSSchemaName: !Ref RDSSchemaName
-        QSS3KeyPrefix: !Ref QSS3KeyPrefix
-        QSS3BucketName: !Ref QSS3BucketName
-        QSS3BucketRegion: !Ref QSS3BucketRegion
-        DatabaseName: !Ref DatabaseName
-        DatabasePort: !Ref DatabasePort
-        DatabaseUserName: !Ref DatabaseUserName
-        MyOrderParameterName: !Ref MyOrderParameterName
-        MyOrderItemParameterName: !Ref MyOrderItemParameterName
-        MyProductParameterName: !Ref MyProductParameterName
+# Resources:
+#   VPCStack:
+#     Type: 'AWS::CloudFormation::Stack'
+#     Properties:
+#       TemplateURL:
+#         !Sub
+#         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/cfn-ps-aws-vpc/templates/aws-vpc.template.yaml
+#         - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+#           S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+#       Parameters:
+#         AvailabilityZones: !Join
+#           - ','
+#           - !Ref AvailabilityZones
+#         NumberOfAZs: '2'
+#         PrivateSubnet1ACIDR: !Ref PrivateSubnet1CIDR
+#         PrivateSubnet2ACIDR: !Ref PrivateSubnet2CIDR
+#         PublicSubnet1CIDR: !Ref PublicSubnet1CIDR
+#         PublicSubnet2CIDR: !Ref PublicSubnet2CIDR
+#         VPCCIDR: !Ref VPCCIDR
+#   ExistingVPCStack:
+#     Type: 'AWS::CloudFormation::Stack'
+#     Properties:
+#       TemplateURL:
+#         !Sub
+#         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/salesforce-connect-appsync-rds-postgresql-existing-vpc.template.yaml
+#         - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+#           S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+#       Parameters:
+#         AvailabilityZones: !Join
+#           - ','
+#           - !Ref AvailabilityZones
+#         VPCID: !GetAtt VPCStack.Outputs.VPCID
+#         PrivateSubnet1ID: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
+#         PrivateSubnet2ID: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
+#         RDSClusterMode: !Ref RDSClusterMode
+#         AutoPauseCluster: !Ref AutoPauseCluster
+#         SecondsUntilAutoPause: !Ref SecondsUntilAutoPause
+#         MinCapacity: !Ref MinCapacity
+#         MaxCapacity: !Ref MaxCapacity
+#         DBInstanceClass: !Ref DBInstanceClass
+#         AppSyncAuthenticationType: !Ref AppSyncAuthenticationType
+#         GraphQLResolverName: !Ref GraphQLResolverName
+#         GraphQLSchemaLocation: !Ref GraphQLSchemaLocation
+#         GraphQLSchemaName: !Ref GraphQLSchemaName
+#         RDSSchemaLocation: !Ref RDSSchemaLocation
+#         RDSSchemaName: !Ref RDSSchemaName
+#         QSS3KeyPrefix: !Ref QSS3KeyPrefix
+#         QSS3BucketName: !Ref QSS3BucketName
+#         QSS3BucketRegion: !Ref QSS3BucketRegion
+#         DatabaseName: !Ref DatabaseName
+#         DatabasePort: !Ref DatabasePort
+#         DatabaseUserName: !Ref DatabaseUserName
+#         MyOrderParameterName: !Ref MyOrderParameterName
+#         MyOrderItemParameterName: !Ref MyOrderItemParameterName
+#         MyProductParameterName: !Ref MyProductParameterName
