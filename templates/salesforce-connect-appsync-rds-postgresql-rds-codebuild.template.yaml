@@ -757,35 +757,35 @@ Resources:
   #       rds.logical_replication: 1
   #       wal_sender_timeout: 0
 
-ServerlessRDSCluster:
-  Type: AWS::RDS::DBCluster
-  Condition: CreateServerlessCluster
-  Properties:
-    Engine: aurora-postgresql
-    EngineMode: provisioned           # v2 is just another instance type on a provisioned cluster
-    ServerlessV2ScalingConfiguration: # this tells CFN to use Serverless v2
-      MinCapacity: !Ref MinCapacity   # ACUs, e.g. 0.5, 1, 2…
-      MaxCapacity: !Ref MaxCapacity
-    EnableHttpEndpoint: true          # Data API support
-    DBClusterParameterGroupName: !Ref ServerlessRDSDBClusterParameterGroup
-    DBSubnetGroupName:        !Ref DBSubnetGroup
-    MasterUsername:          !Ref DatabaseUserName
-    MasterUserPassword:      !Sub "{{resolve:secretsmanager:${RDSSecret}::password}}"
-    StorageEncrypted:        true
-    VpcSecurityGroupIds:     [ !Ref RDSSecurityGroup ]
-    Tags:
-      - Key: Name
-        Value: graphql-rds-serverless-v2-cluster
+  ServerlessRDSCluster:
+    Type: AWS::RDS::DBCluster
+    Condition: CreateServerlessCluster
+    Properties:
+      Engine: aurora-postgresql
+      EngineMode: provisioned           # v2 is just another instance type on a provisioned cluster
+      ServerlessV2ScalingConfiguration: # this tells CFN to use Serverless v2
+        MinCapacity: !Ref MinCapacity   # ACUs, e.g. 0.5, 1, 2…
+        MaxCapacity: !Ref MaxCapacity
+      EnableHttpEndpoint: true          # Data API support
+      DBClusterParameterGroupName: !Ref ServerlessRDSDBClusterParameterGroup
+      DBSubnetGroupName:        !Ref DBSubnetGroup
+      MasterUsername:          !Ref DatabaseUserName
+      MasterUserPassword:      !Sub "{{resolve:secretsmanager:${RDSSecret}::password}}"
+      StorageEncrypted:        true
+      VpcSecurityGroupIds:     [ !Ref RDSSecurityGroup ]
+      Tags:
+        - Key: Name
+          Value: graphql-rds-serverless-v2-cluster
 
-ServerlessRDSDBClusterParameterGroup:
-  Type: AWS::RDS::DBClusterParameterGroup
-  Condition: CreateServerlessCluster
-  Properties:
-    Family:      aurora-postgresql16   # same as provisioned
-    Description: "Aurora Serverless v2 parameter group"
-    Parameters:
-      rds.logical_replication: 1
-      wal_sender_timeout:      0
+  ServerlessRDSDBClusterParameterGroup:
+    Type: AWS::RDS::DBClusterParameterGroup
+    Condition: CreateServerlessCluster
+    Properties:
+      Family:      aurora-postgresql16   # same as provisioned
+      Description: "Aurora Serverless v2 parameter group"
+      Parameters:
+        rds.logical_replication: 1
+        wal_sender_timeout:      0
 
 
 
