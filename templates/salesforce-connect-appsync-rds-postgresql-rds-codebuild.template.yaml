@@ -763,20 +763,18 @@ Resources:
     Properties:
       Engine:             aurora-postgresql
       EngineMode:         serverless
+      # remove any EngineVersion or old ScalingConfiguration block here
+      ServerlessV2ScalingConfiguration:
+        MinCapacity:       !Ref MinCapacity   # ACUs (e.g. 0.5, 1, 2…)
+        MaxCapacity:       !Ref MaxCapacity
       EnableHttpEndpoint: true
-
+      DBSubnetGroupName:  !Ref DBSubnetGroup
+      DBClusterParameterGroupName: !Ref ServerlessRDSDBClusterParameterGroup
       MasterUsername:     !Ref DatabaseUserName
       MasterUserPassword: !Sub "{{resolve:secretsmanager:${RDSSecret}::password}}"
-      DatabaseName:       !Ref DatabaseName
-      Port:               !Ref DatabasePort
-
-      ScalingConfiguration:
-        AutoPause:             !If [AutoPauseClusterCondition, true, false]
-        SecondsUntilAutoPause: !If [AutoPauseClusterCondition, !Ref SecondsUntilAutoPause, !Ref AWS::NoValue]
-        MinCapacity:           !Ref MinCapacity
-        MaxCapacity:           !Ref MaxCapacity
-
-      VpcSecurityGroupIds: [!Ref RDSSecurityGroup]
+      StorageEncrypted:   true
+      VpcSecurityGroupIds:
+        - !Ref RDSSecurityGroup
       Tags:
         - Key: Name
           Value: graphql-rds-serverless-cluster
@@ -785,11 +783,12 @@ Resources:
     Type: AWS::RDS::DBClusterParameterGroup
     Condition: CreateServerlessCluster
     Properties:
-      Description: "Aurora Serverless v2 Cluster Parameter Group"
-      Family:      aurora-postgresql16
+      Family: aurora-postgresql16   # v2 uses the same family as provisioned
+      Description: "Aurora Serverless v2 parameter group"
       Parameters:
         rds.logical_replication: 1
-        wal_sender_timeout:      0
+        wal_sender_timeout: 0
+
 
   SMServerlessRDSAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
