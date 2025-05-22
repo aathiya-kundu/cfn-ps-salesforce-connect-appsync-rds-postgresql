@@ -761,15 +761,12 @@ Resources:
     Type: AWS::RDS::DBCluster
     Condition: CreateServerlessCluster
     Properties:
-      DBClusterParameterGroupName: !Ref ServerlessRDSDBClusterParameterGroup
-      DBSubnetGroupName:        !Ref DBSubnetGroup
-
       Engine:             aurora-postgresql
       EngineMode:         serverless
       EnableHttpEndpoint: true
 
-      MasterUserPassword: !Sub "{{resolve:secretsmanager:${RDSSecret}::password}}"
       MasterUsername:     !Ref DatabaseUserName
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${RDSSecret}::password}}"
       DatabaseName:       !Ref DatabaseName
       Port:               !Ref DatabasePort
 
@@ -779,23 +776,20 @@ Resources:
         MinCapacity:           !Ref MinCapacity
         MaxCapacity:           !Ref MaxCapacity
 
-      StorageEncrypted:    true
       VpcSecurityGroupIds: [!Ref RDSSecurityGroup]
-
       Tags:
-        - Key:   Name
+        - Key: Name
           Value: graphql-rds-serverless-cluster
 
   ServerlessRDSDBClusterParameterGroup:
     Type: AWS::RDS::DBClusterParameterGroup
     Condition: CreateServerlessCluster
     Properties:
-      Description: "Aurora Serverless Cluster Parameter Group"
-      Family:      aurora-postgresql11
+      Description: "Aurora Serverless v2 Cluster Parameter Group"
+      Family:      aurora-postgresql16
       Parameters:
         rds.logical_replication: 1
         wal_sender_timeout:      0
-
 
   SMServerlessRDSAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
