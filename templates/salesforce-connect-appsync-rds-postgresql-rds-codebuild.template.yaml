@@ -769,6 +769,8 @@ Resources:
       EnableHttpEndpoint: true          # Data API support
       DBClusterParameterGroupName: !Ref ServerlessRDSDBClusterParameterGroup
       DBSubnetGroupName:        !Ref DBSubnetGroup
+      DatabaseName: !Ref DatabaseName
+      Port: !Ref DatabasePort
       MasterUsername:          !Ref DatabaseUserName
       MasterUserPassword:      !Sub "{{resolve:secretsmanager:${RDSSecret}::password}}"
       StorageEncrypted:        true
